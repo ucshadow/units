@@ -1,0 +1,183 @@
+FlowRouter.route('/admin', {
+  action: function(){
+    if(Meteor.userId() === 'igk6Wk73qgvGkumip'){
+      ReactLayout.render(MainClass, {
+        content: <AdminPage />
+      });
+    } else {
+      FlowRouter.go('/home');
+    }
+  }
+});
+
+  componentDidMount: function(){
+
+  },
+
+  getInitialState: function(){
+    return {
+      c: null
+    }
+  },
+
+  options: {
+    con: null
+  },
+
+  stream: function(x){
+    connection = new RTCMultiConnection('channel' + x);
+    var videosContainer = document.getElementById('videos-container') || document.body;
+    connection.connect(this.props.unitName);
+    connection.onstream = function(e) {
+      e.mediaElement.width = 600;
+      videosContainer.insertBefore(e.mediaElement, videosContainer.firstChild);
+    };
+    //this.state.con = connection;
+  },
+
+  /*rmc: function(x){
+    console.log('opening ' + x);
+    var roomId = x;
+    var userId = 'test name';
+    var extraOpts = {
+      audio: false,
+      video: false
+    };
+    var connection = new RTCMultiConnection('channel' + roomId);
+    var videosContainer = document.getElementById('videos-container') || document.body;
+
+    this.open = function(){
+      connection.connect();
+      connection.onstream = function(e) {
+        e.mediaElement.width = 600;
+        videosContainer.insertBefore(e.mediaElement, videosContainer.firstChild);
+      };
+    };
+
+    this.close = function(){
+      connection.drop();
+    }
+  }, */
+
+  openRoom: function(){
+    return this.stream(this.props.unitName);
+  },
+
+  sayName: function(){
+    return(this.props.unitName);
+  },
+
+  componentWillUnmount: function(){
+    connection.leave();
+
+  },
+
+  componentDidUpdate: function(){
+    connection.leave();
+  },
+
+  drop: function(){
+    connection.leave();
+  },
+
+
+
+  /*joinManager: function(){
+    var unitname = this.props.unitName;
+    user.join({
+      sessionid: unitname,
+      userid: 'ucshadow',
+      extra: {},
+      session: {
+        audio: false,
+        video: false,
+        oneway: true
+      }
+    })
+  },*/
+
+  pID: function(){
+    return Units.findOne({name: this.props.unitName}).peerId
+  },
+
+  join: function(){
+    var peer = new Peer({
+      host: 'peerjs-signal-byshadow.herokuapp.com',
+      port: 443,
+      secure: true,
+      key: 'peerjs',
+      debug: 3
+    });
+    var conn = peer.connect(this.pID());
+    peer.on('open', function(id){
+      console.log(id);
+      conn.send('data', id)
+    });
+    peer.on('call', function(call) {
+      call.answer(null);
+      call.on('stream', function (stream) {
+        $('#their-video').prop('src', URL.createObjectURL(stream))
+      })
+    });
+    $('#send').click(function(e){
+      e.preventDefault();
+      peer.send('data', 'AAAAAAAAAAAAAAAAJAJAJAJAJJAJAJAJAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+    })
+  },
+
+
+  /*rtcc: function(){
+    user = new RTCMultiConnection('channel' + this.props.unitName);
+    this.joinManager()
+  },*/
+
+
+    /*activateUnit: function(event){
+    let name = (event.target.id.substring(1));
+    var modChannel = 'channel' + name;
+    var modRoom = this.props.unitName;
+    var modID = 'ucshadow';
+    var modSession = {
+      audio: false,
+      video: true,
+      oneway: true
+    };
+    var modExtra = {};
+    var moderator = new RTCMultiConnection(modChannel);
+    moderator.session = modSession;
+    moderator.userid = modID;
+    moderator.extra = modExtra;
+    moderator.open({
+      dontTransmit: true,
+      sessionid: modRoom
+    })
+  },*/
+
+  activateUnit: function(e){
+
+    navigator.getUserMedia({audio: true, video: true}, function(stream){
+      $('#stream_container').prop('src', URL.createObjectURL(stream));
+      window.localStream = stream;
+    }, function(err){
+      console.log(err);
+    });
+    var peer = new Peer({
+      host: 'peerjs-signal-byshadow.herokuapp.com',
+      port: 443,
+      secure: true,
+      key: 'peerjs',
+      debug: 3
+    });
+    peer.on('open', function(id){
+      console.log(id);
+      Meteor.call('peer_id', id, e.target.id.substring(1))
+    });
+    peer.on('call', function(call){
+      call.answer(window.localStream)
+    });
+    peer.on('connection', function(conn){
+      conn.on('data', function(data){
+        console.log(data);
+      })
+    })
+  },
