@@ -4,7 +4,7 @@ if(Meteor.isServer){
       Units.insert(obj);
     },
     delete_unit: function(obj){
-      Units.remove({_id: obj})
+      Units.remove({name: obj})
     },
     is_taking_charge: function(v, n){
       Units.update({name: n}, {$set: {controlledBy: v}})
@@ -28,6 +28,11 @@ if(Meteor.isServer){
       } else {
         return null;
       }
+    },
+    edit_user_prop: function(name, prop, value){
+      var field = {};
+      field[prop] = value;
+      UserStats.update({name: name}, {$set: field})
     },
     add_time: function(obj){
       var n = Meteor.user().username;

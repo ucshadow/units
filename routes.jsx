@@ -16,7 +16,7 @@ FlowRouter.route('/home', {
 
 FlowRouter.route('/admin', {
   action: function(){
-    if(Meteor.userId() === 'igk6Wk73qgvGkumip'){
+    if(Meteor.userId() === 'NNAyof4zhWXYA3bA2'){
       ReactLayout.render(MainClass, {
         content: <AdminPage />
       });

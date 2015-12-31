@@ -24,6 +24,7 @@ UnitProcessor = React.createClass({
         this.props.unitObject.name)} onClick={this.sh}></div>
         <div className="unit_text">
           <div className="alert alert-info unit_info">Name: {this.props.unitObject.name}</div>
+          <div className="alert alert-info unit_info">Type: {this.props.unitObject.type}</div>
           <div className="alert alert-info unit_info">Price: {this.props.unitObject.price}</div>
           <div className="alert alert-info unit_info">Used by: {this.props.unitObject.controlledBy}</div>
         </div>

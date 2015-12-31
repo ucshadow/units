@@ -27,6 +27,7 @@ AdminPage = React.createClass({
     var name = $('#unit_name').val();
     var picture = $('#unit_picture').val();
     var price = $('#unit_price').val();
+    var type = $('#unit_type').val();
     const unit = {
       availability: true,
       controlledBy: 'No One',
@@ -34,7 +35,7 @@ AdminPage = React.createClass({
       name: name,
       picture: picture,
       price: price,
-      type: 'Girl'
+      type: type
     };
     Meteor.call('add_to_units', unit);
   },
@@ -84,8 +85,8 @@ AdminPage = React.createClass({
       // the id/element dom element that will hold remote videos
       remoteVideosEl: 'remotesVideos',
       // immediately ask for camera access
-      autoRequestMedia: true
-      //url: 'https://signalmaster-ucshadow.c9users.io/'
+      autoRequestMedia: true//,
+      //url: 'https://sig-warleader.c9users.io/'
     });
 
     // we have to wait until it's ready
@@ -97,6 +98,13 @@ AdminPage = React.createClass({
     webrtc.on('channelMessage', function(peer, label, message){
       console.log(Date.now() - message.payload);
     })
+  },
+  
+  editProp: function(){
+    var name = $('#new_prop_user').val();
+    var prop = $('#new_prop_prop').val();
+    var value = $('#new_prop_value').val();
+    Meteor.call('edit_user_prop', name, prop, value)
   },
 
   componentDidMount: function(){
@@ -128,6 +136,10 @@ AdminPage = React.createClass({
           <div className="single_field">
             <span className="input-group-addon span_size">Unit Picture</span>
             <input type="text" className="form-control admin_form" id="unit_picture"/>
+          </div>
+          <div className="single_field">
+            <span className="input-group-addon span_size">Unit Type</span>
+            <input type="text" className="form-control admin_form" id="unit_type"/>
           </div>
           <div className="single_field">
             <span className="input-group-addon span_size">Unit Price</span>
@@ -162,8 +174,31 @@ AdminPage = React.createClass({
             </button>
             <span className="avbl_units">Available Users: {this.avblUsersDB()}</span>
         </div>
+        
+        <p>---------------------------------------------------------</p>
+        
+        
+        <span className="glyphicon glyphicon-scissors"> Modify User Stats Prop</span>
+        <div className="input-group">
+          <div className="single_field">
+            <span className="input-group-addon span_size">User Name</span>
+            <input type="text" className="form-control admin_form" id="new_prop_user"/>
+          </div>
+          <div className="single_field">
+            <span className="input-group-addon span_size">User Prop</span>
+            <input type="text" className="form-control admin_form" id="new_prop_prop"/>
+          </div>
+          <div className="single_field">
+            <span className="input-group-addon span_size">New Value</span>
+            <input type="text" className="form-control admin_form" id="new_prop_value"/>
+            <button type="button" className="btn btn-default admin_btn" onClick={this.editProp}>
+            <span className="glyphicon glyphicon-ok"> </span> Confirm
+            </button>
+          </div>
+        </div>
+        
 
-        <UploadUI />
+        {/*<UploadUI />*/}
 
         <p>---------------------------------------------------------</p>
 

@@ -24,3 +24,8 @@ accounts-ui
 twbs:bootstrap
 tomi:upload-server
 tomi:upload-jquery
+fortawesome:fontawesome
+meteorhacks:npm
+
+
+npm-container

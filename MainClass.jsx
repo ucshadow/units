@@ -11,7 +11,7 @@ MainClass = React.createClass({
 
   soMuchDanger: function(){
     return {
-      __html: '<img width="40px" alt="Your Avatar" src="/imgs/Minah.jpg"> </img>'
+      __html: '<img width="40px" alt="Your Avatar" src="/imgs/avatars/default.png"> </img>'
     }
   },
 
@@ -43,15 +43,19 @@ MainClass = React.createClass({
       <div className="single_unit_container">
         <div className="main_layout">
           <header className="block">
+          
 
             <ul className="header-menu horizontal-list">
               <li>
-                <span className="icon scnd-font-color"><a href="/home">Home</a></span>
+                <a href="/home"><div className="menu_navv">Home</div></a>
               </li>
               <li>
-                <span className="icon entypo-cog scnd-font-color"><a href="/live">Live</a></span>
+                <a href="/live"><div className="menu_navv">Live</div></a>
               </li>
             </ul>
+            
+            
+            
             <div className="profile-menu">
               <p><span className="scnd-font-color"><AccountsUI /></span></p>
               <div className="profile-picture small-profile-picture" dangerouslySetInnerHTML={this.soMuchDanger()}>
